@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>RGB Color Addition Simulation</title>
+    <!-- Load Tailwind CSS for utility-first styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Inter font from Google Fonts for a modern look -->
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <style>
+        /* Apply the Inter font globally */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom styles for the range input (sliders) */
+        input[type="range"] {
+            -webkit-appearance: none; /* Remove default WebKit styling */
+            appearance: none; /* Remove default styling */
+            width: 100%; /* Full width */
+            height: 8px; /* Height of the track */
+            border-radius: 5px; /* Rounded corners for the track */
+            background: #4a5568; /* Dark grey track background */
+            outline: none; /* Remove outline on focus */
+            opacity: 0.7; /* Slightly transparent */
+            transition: opacity .2s; /* Smooth transition for opacity change */
+        }
+        /* Hover effect for sliders */
+        input[type="range"]:hover {
+            opacity: 1; /* Fully opaque on hover */
+        }
+        /* WebKit (Chrome, Safari) specific styles for the slider thumb */
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; /* Remove default thumb styling */
+            appearance: none; /* Remove default thumb styling */
+            width: 24px; /* Width of the thumb */
+            height: 24px; /* Height of the thumb */
+            border-radius: 50%; /* Make the thumb circular */
+            cursor: pointer; /* Change cursor to pointer on hover */
+            margin-top: -8px; /* Adjust vertical position to align with track */
+        }
+        /* Mozilla (Firefox) specific styles for the slider thumb */
+        input[type="range"]::-moz-range-thumb {
+            width: 24px; /* Width of the thumb */
+            height: 24px; /* Height of the thumb */
+            border-radius: 50%; /* Make the thumb circular */
+            cursor: pointer; /* Change cursor to pointer on hover */
+        }
+        /* Specific thumb colors for each slider */
+        #red-slider::-webkit-slider-thumb { background: #ef4444; } /* Red thumb */
+        #red-slider::-moz-range-thumb { background: #ef4444; }
+        #green-slider::-webkit-slider-thumb { background: #22c55e; } /* Green thumb */
+        #green-slider::-moz-range-thumb { background: #22c55e; }
+        #blue-slider::-webkit-slider-thumb { background: #3b82f6; } /* Blue thumb */
+        #blue-slider::-moz-range-thumb { background: #3b82f6; }
+        /* Custom styles for the hex input fields */
+        .hex-input {
+            background-color: #4a5568; /* Match slider track background */
+            color: #ffffff; /* White text */
+            border: none; /* No border */
+            padding: 0.5rem 0.75rem; /* Padding for better appearance */
+            border-radius: 0.375rem; /* Rounded corners */
+            text-transform: uppercase; /* Ensure input is uppercase */
+            text-align: center; /* Center text */
+            width: 4rem; /* Fixed width */
+            font-family: 'Inter', sans-serif; /* Consistent font */
+        }
+        .hex-input:focus {
+            outline: none; /* Remove outline on focus */
+            box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.5); /* Blue glow on focus */
+        }
+        /* Style for the list in the introduction */
+        .intro-list {
+            list-style-position: inside;
+            padding-left: 0.5rem;
+        }
+        .intro-list li {
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-4">
+
+<!-- Main container for the entire application -->
+<div class="w-full max-w-5xl bg-gray-800 rounded-2xl shadow-2xl p-6 md:p-8">
+
+    <!-- About Project Section (Styled with white background) -->
+    <section class="bg-white text-gray-800 text-center text-base rounded-lg p-8 mb-10">
+        <h2 class="text-xl font-semibold mb-3 text-black">About this project</h2>
+        <p class="mx-auto">Questo sito è stato sviluppato da <strong>Giacomo Dalla Pozza</strong>. 
+		<a href="https://www.linkedin.com/in/giacomodallapozza" target="_blank" rel="noopener noreferrer" class="inline-block ml-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-blue-600 hover:text-blue-500">
+                        <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.25 6.5 1.75 1.75 0 016.5 8.25zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93-.94 0-1.62.68-1.62 1.93V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.38.99 3.38 3.5V19z"></path>
+                    </svg>
+                </a>
+		<br>L’obiettivo è fornire una simulazione interattiva del modello RGB per scopi educativi.</p>
+        <p class="mt-4">
+            Licenza:
+            <a class="text-blue-600 underline hover:text-blue-500" href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener noreferrer" target="_blank">
+                Creative Commons BY-NC 4.0
+            </a>
+        </p>
+        <p class="mt-4 italic text-gray-600">Questo sito non raccoglie né conserva alcun dato personale.</p>
+    </section>
+
+    <!-- Introduction Section -->
+    <section class="text-left text-gray-300 text-base leading-relaxed mb-10">
+        <h1 class="text-3xl font-bold mb-4 text-white text-center">Benvenuto nel Simulatore di Colori RGB</h1>
+
+        <!-- Introduction Section - Removed max-w-4xl for wider text -->
+        <section class="mx-auto text-left text-gray-300 text-base leading-relaxed mb-10">
+            <h2 class="text-2xl font-bold mb-4 text-white">Cos'è il modello RGB?</h2>
+            <p>Il modello di colori RGB è il cuore della tecnologia che illumina i nostri schermi. <br>Si basa sulla combinazione di tre luci primarie: <strong>rosso (Red)</strong>, <strong>verde (Green)</strong> e <strong>blu (Blue)</strong>.</p>
+            <p class="mt-3">Miscelando queste tre luci a diverse intensità, è possibile riprodurre milioni di colori. <br>Ad esempio:</p>
+            <ul class="intro-list">
+                <li><span class="font-semibold text-white">Bianco puro</span> si ottiene combinando rosso, verde e blu alla massima intensità.</li>
+                <li><span class="font-semibold text-white">Nero</span> è semplicemente l'assenza di luce (tutti i valori a zero).</li>
+            </ul>
+            <p class="mt-3">Questa simulazione ti permette di sperimentare in prima persona con la sintesi additiva. <br>Usa gli slider o inserisci i valori esadecimali per vedere come la fusione delle luci colorate crei nuovi colori.</p>
+        </section>
+    </section>
+
+    <!-- Simulator Header -->
+    <header class="text-center mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-green-500 to-blue-500">RGB Color Addition Simulation</h1>
+        <p class="text-gray-400 mt-2">Adjust the intensity of red, green, and blue lights, or enter hexadecimal values, to see how they mix.</p>
+    </header>
+
+    <!-- Main content area for the simulator -->
+    <main class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+        <!-- Color visualization section with canvas -->
+        <div class="relative w-full aspect-square bg-black rounded-lg overflow-hidden border-4 border-gray-700">
+            <canvas id="colorCanvas"></canvas>
+        </div>
+        <!-- Controls section for sliders and color preview -->
+        <div class="flex flex-col space-y-8">
+            <div class="space-y-6">
+                <!-- Red color control -->
+                <div class="flex items-center space-x-4">
+                    <label class="w-16 text-xl font-semibold text-red-500" for="red-slider">Red</label>
+                    <input class="flex-grow" id="red-slider" max="255" min="0" type="range" value="255"/>
+                    <input class="hex-input" id="red-hex-input" maxlength="2" pattern="[0-9A-Fa-f]{2}" type="text" value="FF"/>
+                </div>
+                <!-- Green color control -->
+                <div class="flex items-center space-x-4">
+                    <label class="w-16 text-xl font-semibold text-green-500" for="green-slider">Green</label>
+                    <input class="flex-grow" id="green-slider" max="255" min="0" type="range" value="255"/>
+                    <input class="hex-input" id="green-hex-input" maxlength="2" pattern="[0-9A-Fa-f]{2}" type="text" value="FF"/>
+                </div>
+                <!-- Blue color control -->
+                <div class="flex items-center space-x-4">
+                    <label class="w-16 text-xl font-semibold text-blue-500" for="blue-slider">Blue</label>
+                    <input class="flex-grow" id="blue-slider" max="255" min="0" type="range" value="255"/>
+                    <input class="hex-input" id="blue-hex-input" maxlength="2" pattern="[0-9A-Fa-f]{2}" type="text" value="FF"/>
+                </div>
+            </div>
+            <!-- Combined color preview and hexadecimal value display -->
+            <div class="flex items-center justify-center space-x-6 pt-4">
+                <div class="w-24 h-24 rounded-lg border-4 border-gray-600 transition-colors duration-200" id="color-preview"></div>
+                <div class="text-center">
+                    <p class="text-gray-400 text-sm">Resulting Color</p>
+                    <p class="text-2xl font-mono tracking-widest" id="hex-value"></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</div>
+
+<script>
+    // Get references to DOM elements
+    const canvas = document.getElementById('colorCanvas');
+    const ctx = canvas.getContext('2d'); // Get 2D rendering context
+
+    const redSlider = document.getElementById('red-slider');
+    const greenSlider = document.getElementById('green-slider');
+    const blueSlider = document.getElementById('blue-slider');
+
+    // References to the new hex input fields
+    const redHexInput = document.getElementById('red-hex-input');
+    const greenHexInput = document.getElementById('green-hex-input');
+    const blueHexInput = document.getElementById('blue-hex-input');
+
+    const colorPreview = document.getElementById('color-preview');
+    const hexValue = document.getElementById('hex-value');
+
+    /**
+     * Converts a decimal color component (0-255) to a two-digit hexadecimal string.
+     * @param {number} c - The color component value.
+     * @returns {string} The two-digit hexadecimal representation.
+     */
+    const toHex = (c) => ('0' + c.toString(16)).slice(-2).toUpperCase();
+
+    /**
+     * Draws the color circles on the canvas and updates the color preview/hex values.
+     */
+    function drawColors() {
+        // Get current values from the sliders
+        const r = parseInt(redSlider.value);
+        const g = parseInt(greenSlider.value);
+        const b = parseInt(blueSlider.value);
+
+        // Update the hexadecimal input fields when sliders are moved
+        redHexInput.value = toHex(r);
+        greenHexInput.value = toHex(g);
+        blueHexInput.value = toHex(b);
+
+        // Calculate the final mixed color and update the preview box
+        const finalColor = `rgb(${r}, ${g}, ${b})`;
+        colorPreview.style.backgroundColor = finalColor;
+
+        // Update the combined hexadecimal value display
+        hexValue.textContent = `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+
+        // Draw the overlapping circles on the canvas
+        drawCircles(r, g, b);
+    }
+    
+    /**
+     * Draws the three overlapping color circles on the canvas.
+     * @param {number} r - Red component value (0-255).
+     * @param {number} g - Green component value (0-255).
+     * @param {number} b - Blue component value (0-255).
+     */
+    function drawCircles(r, g, b) {
+        // Clear the entire canvas before redrawing
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Set global composite operation to "lighter" for additive color mixing
+        ctx.globalCompositeOperation = "lighter"; 
+
+        // Calculate radius and center points based on canvas size
+        const radius = canvas.width / 3.2; // Adjust radius based on canvas size
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        
+        // Define positions for the three circles to create a triangular overlap
+        const positions = [
+            { x: centerX, y: centerY - radius / 2.5 },             // Red (top)
+            { x: centerX - radius / 1.7, y: centerY + radius / 2.5 }, // Green (bottom-left)
+            { x: centerX + radius / 1.7, y: centerY + radius / 2.5 }  // Blue (bottom-right)
+        ];
+
+        // Draw the red circle
+        ctx.beginPath();
+        ctx.fillStyle = `rgb(${r}, 0, 0)`; // Only red component
+        ctx.arc(positions[0].x, positions[0].y, radius, 0, 2 * Math.PI);
+        ctx.fill();
+
+        // Draw the green circle
+        ctx.beginPath();
+        ctx.fillStyle = `rgb(0, ${g}, 0)`; // Only green component
+        ctx.arc(positions[1].x, positions[1].y, radius, 0, 2 * Math.PI);
+        ctx.fill();
+        
+        // Draw the blue circle
+        ctx.beginPath();
+        ctx.fillStyle = `rgb(0, 0, ${b})`; // Only blue component
+        ctx.arc(positions[2].x, positions[2].y, radius, 0, 2 * Math.PI);
+        ctx.fill();
+    }
+
+    /**
+     * Handles input from the hexadecimal text fields.
+     * Converts hex to decimal and updates the corresponding slider, then redraws.
+     * @param {Event} event - The input event object.
+     */
+    function handleHexInput(event) {
+        let value = event.target.value.toUpperCase(); // Get input value and convert to uppercase
+        // Ensure the input contains only valid hex characters (0-9, A-F)
+        value = value.replace(/[^0-9A-F]/g, ''); 
+        event.target.value = value; // Update the input field with cleaned value
+
+        if (value.length === 2) {
+            const decimalValue = parseInt(value, 16); // Convert hex to decimal
+            if (!isNaN(decimalValue)) { // Check if conversion was successful
+                if (event.target.id === 'red-hex-input') {
+                    redSlider.value = decimalValue;
+                } else if (event.target.id === 'green-hex-input') {
+                    greenSlider.value = decimalValue;
+                } else if (event.target.id === 'blue-hex-input') {
+                    blueSlider.value = decimalValue;
+                }
+                drawColors(); // Redraw with new values
+            }
+        } else if (value.length < 2) {
+            // If input is incomplete, still try to parse if there's at least one char
+            const decimalValue = parseInt(value, 16);
+            if (!isNaN(decimalValue)) {
+                if (event.target.id === 'red-hex-input') {
+                    redSlider.value = decimalValue * 16; // Adjust for single hex digit for partial preview
+                } else if (event.target.id === 'green-hex-input') {
+                    greenSlider.value = decimalValue * 16;
+                } else if (event.target.id === 'blue-hex-input') {
+                    blueSlider.value = decimalValue * 16;
+                }
+                drawColors();
+            }
+        }
+    }
+
+    /**
+     * Resizes the canvas to fit its parent container and redraws the content.
+     */
+    function resizeCanvas() {
+        const container = canvas.parentElement;
+        // Set canvas dimensions to be square, fitting the smaller side of the container
+        const size = Math.min(container.clientWidth, container.clientHeight);
+        canvas.width = size;
+        canvas.height = size;
+        drawColors(); // Redraw colors after canvas has been resized
+    }
+
+    // Add event listeners for slider input changes
+    redSlider.addEventListener('input', drawColors);
+    greenSlider.addEventListener('input', drawColors);
+    blueSlider.addEventListener('input', drawColors);
+
+    // Add event listeners for hex input changes
+    redHexInput.addEventListener('input', handleHexInput);
+    greenHexInput.addEventListener('input', handleHexInput);
+    blueHexInput.addEventListener('input', handleHexInput);
+
+    // Add event listener for window resize to make the canvas responsive
+    window.addEventListener('resize', resizeCanvas);
+
+    // Initial call to set up the canvas and colors when the page loads
+    resizeCanvas();
+</script>
+</body>
+</html>
